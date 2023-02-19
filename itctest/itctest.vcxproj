@@ -135,10 +135,12 @@
    -->
   <ItemGroup>
     <ClCompile Include="..\itc\InterpretConst.cpp" />
+    <ClCompile Include="democonst.cpp" />
     <ClCompile Include="itctest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\itc\InterpretConst.h" />
+    <ClInclude Include="democonst.h" />
   </ItemGroup>
   <!-- MSBuild system stock Cpp.targets -->
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

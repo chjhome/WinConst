@@ -98,14 +98,42 @@ class CInterpretConst
 public:
 	virtual ~CInterpretConst();
 
-	CInterpretConst(const Enum2Val_st *arEnum2Val, int nEnum2Val, 
-		const TCHAR *valfmt=nullptr);
+	CInterpretConst(const Enum2Val_st *arEnum2Val, int nEnum2Val, const TCHAR *valfmt=nullptr)
+	{
+		_ctor(arEnum2Val, nEnum2Val, valfmt);
+	}
 
-	CInterpretConst(const Bitfield2Val_st *arBitfield2Val, int nBitfield2Val, 
-		const TCHAR *valfmt=nullptr);
+	template<size_t eles>
+	CInterpretConst(const Enum2Val_st (&ar)[eles], const TCHAR *valfmt=nullptr)
+	{
+		_ctor(ar, eles, valfmt);
+	}
 
-	CInterpretConst(const ConstSection_st *arSections, int nSections, 
-		const TCHAR *valfmt=nullptr);
+	//
+
+	CInterpretConst(const Bitfield2Val_st *arBitfield2Val, int nBitfield2Val, const TCHAR *valfmt=nullptr)
+	{
+		_ctor(arBitfield2Val, nBitfield2Val, valfmt);
+	}
+
+	template<size_t eles>
+	CInterpretConst(const Bitfield2Val_st (&ar)[eles], const TCHAR *valfmt=nullptr)
+	{
+		_ctor(ar, eles, valfmt);
+	}
+
+	//
+
+	CInterpretConst(const ConstSection_st *arSections, int nSections, const TCHAR *valfmt=nullptr)
+	{
+		_ctor(arSections, nSections, valfmt);
+	}
+
+	template<size_t eles>
+	CInterpretConst(const ConstSection_st (&ar)[eles], const TCHAR *valfmt=nullptr)
+	{
+		_ctor(ar, eles, valfmt);
+	}
 
 	const TCHAR *Interpret(CONSTVAL_t val, DisplayFormat_et dispfmt,
 		TCHAR *buf, int bufsize);
@@ -120,6 +148,16 @@ private:
 		OneDisplayMaxChars = 100,
 		FmtSpecMaxChars = 10,
 	};
+
+private:
+	void _ctor(const Enum2Val_st *arEnum2Val, int nEnum2Val, 
+		const TCHAR *valfmt);
+
+	void _ctor(const Bitfield2Val_st *arBitfield2Val, int nBitfield2Val, 
+		const TCHAR *valfmt);
+
+	void _ctor(const ConstSection_st *arSections, int nSections, 
+		const TCHAR *valfmt);
 
 private:
 	void _reset(const TCHAR *valfmt);

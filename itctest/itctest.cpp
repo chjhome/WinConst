@@ -6,35 +6,9 @@
 #include <locale.h>
 
 #include "..\itc\InterpretConst.h"
+#include "democonst.h"
 
 using namespace itc;
-
-const Const2Val_st Demo1Sec1[] =
-{
-	{ _T("SEC1_VAL0"), 0 },
-	{ _T("SEC1_VAL1"), 1 },
-	{ _T("SEC1_VAL2"), 2 },
-	{ _T("SEC1_VAL3"), 3 },
-};
-const Const2Val_st Demo1Sec2[] =
-{
-	{ _T("SEC2_VAL0"), 0<<2 },
-	{ _T("SEC2_VAL1"), 1<<2 },
-	{ _T("SEC2_VAL2"), 2<<2 },
-	{ nullptr, 3<<2 },
-	{ _T("SEC2_VAL4"), 4<<2 },
-	{ _T("SEC2_VAL5"), 5<<2 },
-	{ _T("SEC2_VAL6"), 6<<2 },
-//	{ _T("SEC2_VAL7"), 7<<2 },
-};
-
-const ConstSection_st ar_Demo1CS[] =
-{
-	{ 0x3, Demo1Sec1, ARRAYSIZE(Demo1Sec1) },
-	{ 0x7<<2, Demo1Sec2, ARRAYSIZE(Demo1Sec2) },
-};
-
-CInterpretConst g_itc1(ar_Demo1CS, ARRAYSIZE(ar_Demo1CS));
 
 void test_itc1()
 {
@@ -42,7 +16,7 @@ void test_itc1()
 	int i;
 	for(i=0; i<ARRAYSIZE(arVals); i++)
 	{
-		_tprintf(_T("%3d : %s\n"), arVals[i], ITCS(arVals[i], g_itc1));
+		_tprintf(_T("%3d : %s\n"), arVals[i], ITCS(arVals[i], itc1));
 	}
 /*
   0 : SEC1_VAL0|SEC2_VAL0
@@ -64,26 +38,13 @@ void test_itc1()
 */
 }
 
-const Enum2Val_st e2v_weekday[] =
-{
-	{_T("Sunday"), 0},
-	{_T("Monday"), 1},
-	{_T("Tuesday"), 2},
-	{_T("Wednesday"), 3},
-	{_T("Thursday"), 4},
-	{_T("Friday"), 5},
-	{_T("Saturday"), 6},
-};
-CInterpretConst itc_weekday(e2v_weekday, ARRAYSIZE(e2v_weekday));
-
-
 void test_itc_enum()
 {
 	TCHAR buf[80] = {};
 	int arVals[] = {0,1,2, 5,6,7};
 	for(int i=0; i<ARRAYSIZE(arVals); i++)
 	{
-		itc_weekday.Interpret(arVals[i], DF_NameOnly, buf, ARRAYSIZE(buf));
+		itc::weekday.Interpret(arVals[i], DF_NameOnly, buf, ARRAYSIZE(buf));
 		_tprintf(_T("%3d : %s\n"), arVals[i], buf);
 	}
 /*
@@ -104,7 +65,7 @@ const Bitfield2Val_st b2v_sample1[] =
 	{_T("bit4"), 1<<4},
 	{_T("bit5and6"), 32+64}, // bit 5&6 must both be set to signify this name
 };
-CInterpretConst itc_bitfields(b2v_sample1, ARRAYSIZE(b2v_sample1));
+CInterpretConst BFsample1(b2v_sample1);
 
 
 void test_itc_bitfields()
@@ -113,7 +74,7 @@ void test_itc_bitfields()
 	int arVals[] = {0,1,2,3,4,5,6,7,8,9, 16,17, 32,64,96};
 	for(int i=0; i<ARRAYSIZE(arVals); i++)
 	{
-		itc_bitfields.Interpret(arVals[i], DF_NameOnly, buf, ARRAYSIZE(buf));
+		BFsample1.Interpret(arVals[i], DF_NameOnly, buf, ARRAYSIZE(buf));
 		_tprintf(_T("%3d : %s\n"), arVals[i], buf);
 	}
 /*
@@ -140,7 +101,7 @@ void test_itc_enum_showval_defaultfmt()
 	int arVals[] = {0,1,2, 5,6,7};
 	for(int i=0; i<ARRAYSIZE(arVals); i++)
 	{
-		_tprintf(_T("%3d : %s\n"), arVals[i], ITCSv(arVals[i], itc_weekday));
+		_tprintf(_T("%3d : %s\n"), arVals[i], ITCSv(arVals[i], weekday));
 	}
 /*
   0 : Sunday(0)
@@ -157,7 +118,7 @@ void test_itc_bitfields_defaultfmt()
 	int arVals[] = {0,1,2,3,4,5,6,7,8,9, 16,17, 32,64,96};
 	for(int i=0; i<ARRAYSIZE(arVals); i++)
 	{
-		_tprintf(_T("%3d : %s\n"), arVals[i], ITCSv(arVals[i], itc_bitfields));
+		_tprintf(_T("%3d : %s\n"), arVals[i], ITCSv(arVals[i], BFsample1));
 	}
 /*
   0 : 0

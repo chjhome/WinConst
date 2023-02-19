@@ -54,7 +54,7 @@ CInterpretConst::~CInterpretConst()
 		delete []m_arSections;
 }
 
-CInterpretConst::CInterpretConst(const ConstSection_st *arSections, int nSections,
+void CInterpretConst::_ctor(const ConstSection_st *arSections, int nSections,
 	const TCHAR *valfmt)
 {
 	_reset(valfmt);
@@ -65,7 +65,7 @@ CInterpretConst::CInterpretConst(const ConstSection_st *arSections, int nSection
 	ensure_unique_masks();
 }
 
-CInterpretConst::CInterpretConst(const Enum2Val_st *arEnum2Val, int nEnum2Val,
+void CInterpretConst::_ctor(const Enum2Val_st *arEnum2Val, int nEnum2Val,
 	const TCHAR *valfmt)
 {
 	_reset(valfmt);
@@ -80,7 +80,7 @@ CInterpretConst::CInterpretConst(const Enum2Val_st *arEnum2Val, int nEnum2Val,
 	ensure_unique_masks();
 }
 
-CInterpretConst::CInterpretConst(const Bitfield2Val_st *arBitfield2Val, int nBitfield2Val,
+void CInterpretConst::_ctor(const Bitfield2Val_st *arBitfield2Val, int nBitfield2Val,
 	const TCHAR *valfmt)
 {
 	_reset(valfmt);
