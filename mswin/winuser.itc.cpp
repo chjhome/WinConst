@@ -326,7 +326,7 @@ const Enum2Val_st e2v_WM_xxx[] =
 	ITC_NAMEPAIR(WM_PENWINLAST), // 0x038F
 
 };
-CInterpretConst WM_xxx(e2v_WM_xxx, _T("0x%02X"));
+CInterpretConst WM_xxx(e2v_WM_xxx, ITCF_HEX1B);
 
 ///////////////////////////////////////////////////////////////////////////
 // VK_xxx : Virtual Keycode , VS2010
@@ -665,9 +665,27 @@ const Enum2Val_st e2v_VK_xxx[] =
 	ITC_NAMEPAIR(VK_PA1), // 0xFD
 	ITC_NAMEPAIR(VK_OEM_CLEAR), // 0xFE
 };
-CInterpretConst VK_xxx(e2v_VK_xxx, _T("0x%02X"));
+CInterpretConst VK_xxx(e2v_VK_xxx, ITCF_HEX1B);
 
 
+///////////////////////////////////////////////////////////////////////////
+// LLKHF_xxx : KBDLLHOOKSTRUCT.flags , VS2010+
+// Low-Level Keyboard Hook Flag
+///////////////////////////////////////////////////////////////////////////
+
+#ifndef LLKHF_LOWER_IL_INJECTED
+#define LLKHF_LOWER_IL_INJECTED 0x2 // since Win8+
+#endif
+
+const Bitfield2Val_st b2v_LLKHF_xxx[] =
+{
+	ITC_NAMEPAIR(LLKHF_EXTENDED), // (KF_EXTENDED >> 8) // bit 0, 0x01
+	ITC_NAMEPAIR(LLKHF_LOWER_IL_INJECTED),              // bit 1, 0x02
+	ITC_NAMEPAIR(LLKHF_INJECTED), // 0x00000010         // bit 4, 0x10
+	ITC_NAMEPAIR(LLKHF_ALTDOWN),  // (KF_ALTDOWN >> 8)  // bit 5, 0x20
+	ITC_NAMEPAIR(LLKHF_UP),       // (KF_UP >> 8)       // bit 7, 0x80 true=key-up
+};
+CInterpretConst LLKHF_xxx(b2v_LLKHF_xxx, ITCF_HEX1B);
 
 
 } //namespace itc {
