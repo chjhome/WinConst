@@ -191,7 +191,9 @@ private:
 
 #define ITCSv(val, itcobj) (itcobj).Interpret((itc::CONSTVAL_t)(val), itc::DF_NameAndValue).get()
 
-
+#define ITCF_HEX1B _T("0x%02X")
+#define ITCF_HEX2B _T("0x%04X")
+#define ITCF_HEX4B _T("0x%08X")
 
 } // namespace itc
 

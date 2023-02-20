@@ -22,7 +22,7 @@ void CInterpretConst::_reset(const TCHAR *valfmt)
 
 bool CInterpretConst::SetValFmt(const TCHAR *fmt)
 {
-	// fmt example: "%d", "%X", "0x%04X"
+	// fmt example: "%d", "%X", "0x%02X", "0x%04X"
 
 	bool is_correct_valfmt = true;
 
@@ -201,8 +201,21 @@ const TCHAR *CInterpretConst::Interpret(
 		{
 			if(!m_using_Bitfield_ctor || secval!=0)
 			{
+				TCHAR fmt_explicit[10] = {};
+				const TCHAR *p_fmt_concat = nullptr;
+
+				if(m_valfmt)
+				{
+					_sntprintf_s(fmt_explicit, _TRUNCATE, _T("%%s%s|"), m_valfmt);
+					p_fmt_concat = fmt_explicit;
+				}
+				else
+				{
+					p_fmt_concat = is_enum_ctor() ? _T("%s%u|") : _T("%s0x%X|");
+				}
+
 				_sntprintf_s(buf, bufsize, _TRUNCATE, 
-					is_enum_ctor() ? _T("%s%u|") : _T("%s0x%X|"), 
+					p_fmt_concat, 
 					buf, secval);
 			}
 			else
