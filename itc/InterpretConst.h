@@ -1,7 +1,7 @@
 #ifndef __InterpretConst_h_
 #define __InterpretConst_h_
 
-#include <tchar.h> // for TCHAR
+#include <tchar.h> // for TCHAR & _T
 
 
 namespace itc
@@ -185,11 +185,11 @@ private:
 
 #define ITC_NAMEPAIR(macroname) { _T( #macroname ) , macroname }
 
-#define ITCS(val, itcobj) (itcobj).Interpret((CONSTVAL_t)(val), itc::DF_NameOnly).get()
+#define ITCS(val, itcobj) (itcobj).Interpret((itc::CONSTVAL_t)(val), itc::DF_NameOnly).get()
 // -- the "return" of ITCS() macro can be passed as snprintf's variadic params
 // Note: ITCS() cannot be used in __try{} block, otherwise we'll get Compiler Error C2712.
 
-#define ITCSv(val, itcobj) (itcobj).Interpret((CONSTVAL_t)(val), itc::DF_NameAndValue).get()
+#define ITCSv(val, itcobj) (itcobj).Interpret((itc::CONSTVAL_t)(val), itc::DF_NameAndValue).get()
 
 
 
