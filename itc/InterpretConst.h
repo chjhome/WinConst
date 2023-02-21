@@ -118,9 +118,9 @@ public:
 
 	//
 
-	CInterpretConst(const ConstGroup_st *arSections, int nSections, const TCHAR *valfmt=nullptr)
+	CInterpretConst(const ConstGroup_st *arGroups, int nGroups, const TCHAR *valfmt=nullptr)
 	{
-		_ctor(arSections, nSections, valfmt);
+		_ctor(arGroups, nGroups, valfmt);
 	}
 
 	template<size_t eles>
@@ -132,7 +132,7 @@ public:
 	//
 
 	CInterpretConst(const TCHAR *valfmt,
-		const ConstGroup_st *arSections, int nSections, 
+		const ConstGroup_st *arGroups, int nGroups, 
 		const Bitfield2Val_st *arBitfield2Val, int nBitfield2Val,
 		... // more [arBitfield2Val, nBitfield2Val] pairs, end with [nullptr, 0]
 		);
@@ -160,7 +160,7 @@ private:
 	void _ctor(const Bitfield2Val_st *arBitfield2Val, int nBitfield2Val, 
 		const TCHAR *valfmt);
 
-	void _ctor(const ConstGroup_st *arSections, int nSections, 
+	void _ctor(const ConstGroup_st *arGroups, int nGroups, 
 		const TCHAR *valfmt);
 
 private:

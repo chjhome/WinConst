@@ -95,19 +95,19 @@ void CInterpretConst::_ctor(const Bitfield2Val_st *arBitfield2Val, int nBitfield
 	ensure_unique_masks();
 }
 
-void CInterpretConst::_ctor(const ConstGroup_st *arSections, int nSections,
+void CInterpretConst::_ctor(const ConstGroup_st *arGroups, int nGroups,
 	const TCHAR *valfmt)
 {
 	_reset(valfmt);
 
-	m_arGroups = const_cast<ConstGroup_st*>(arSections);
-	m_nGroups = nSections;
+	m_arGroups = const_cast<ConstGroup_st*>(arGroups);
+	m_nGroups = nGroups;
 
 	ensure_unique_masks();
 }
 
 CInterpretConst::CInterpretConst(const TCHAR *valfmt,
-	const ConstGroup_st *arSections, int nSections, 
+	const ConstGroup_st *arGroups, int nGroups, 
 	const Bitfield2Val_st *arBitfield2Val, int nBitfield2Val,
 	... // more [arBitfield2Val, nBitfield2Val] pairs, end with [nullptr, nullptr]
 	) // most generic ctor, combine two sets of input
@@ -121,7 +121,7 @@ CInterpretConst::CInterpretConst(const TCHAR *valfmt,
 	if(1)
 	{
 		va_list args;
-		va_start(args, nSections);
+		va_start(args, nGroups);
 
 		for(; ; nBitfieldsChunk++)
 		{
@@ -140,24 +140,24 @@ CInterpretConst::CInterpretConst(const TCHAR *valfmt,
 	// check quantity of input bitfields chunks <<< 
 	// Result in nBitfieldsAll.
 
-	m_nGroups = nSections + nBitfieldsAll;
+	m_nGroups = nGroups + nBitfieldsAll;
 
 	m_arGroups = new ConstGroup_st[m_nGroups];
 	if(!m_arGroups)
 		return;
 
-	for(int i=0; i<nSections; i++)
+	for(int i=0; i<nGroups; i++)
 	{
-		m_arGroups[i].GroupMask = arSections[i].GroupMask;
-		m_arGroups[i].arEnum2Val = arSections[i].arEnum2Val;
-		m_arGroups[i].nEnum2Val  = arSections[i].nEnum2Val;
+		m_arGroups[i].GroupMask = arGroups[i].GroupMask;
+		m_arGroups[i].arEnum2Val = arGroups[i].arEnum2Val;
+		m_arGroups[i].nEnum2Val  = arGroups[i].nEnum2Val;
 	}
 
 	va_list args;
-	va_start(args, nSections);
+	va_start(args, nGroups);
 	int bfall_verify = 0;
 
-	int advSection = nSections;
+	int advGroup = nGroups;
 	
 	for(; ;)
 	{
@@ -171,12 +171,12 @@ CInterpretConst::CInterpretConst(const TCHAR *valfmt,
 
 		for(int j=0; j<nBF; j++)
 		{
-			m_arGroups[advSection+j].GroupMask = pBF[j].ConstVal;
-			m_arGroups[advSection+j].arEnum2Val = reinterpret_cast<const Enum2Val_st*>(pBF+j);
-			m_arGroups[advSection+j].nEnum2Val  = 1;
+			m_arGroups[advGroup+j].GroupMask = pBF[j].ConstVal;
+			m_arGroups[advGroup+j].arEnum2Val = reinterpret_cast<const Enum2Val_st*>(pBF+j);
+			m_arGroups[advGroup+j].nEnum2Val  = 1;
 		}
 
-		advSection   += nBF;
+		advGroup   += nBF;
 		bfall_verify += nBF;
 	}
 
