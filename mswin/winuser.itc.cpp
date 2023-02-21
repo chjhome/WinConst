@@ -9,7 +9,7 @@ namespace itc {
 // WM_xxx : Windows GUI messages , VS2010
 ///////////////////////////////////////////////////////////////////////////
 
-const Enum2Val_st e2v_WM_xxx[] =
+const Enum2Val_st E2v_WM_xxx[] =
 {
 	ITC_NAMEPAIR(WM_NULL),
 
@@ -326,7 +326,7 @@ const Enum2Val_st e2v_WM_xxx[] =
 	ITC_NAMEPAIR(WM_PENWINLAST), // 0x038F
 
 };
-CInterpretConst WM_xxx(e2v_WM_xxx, ITCF_HEX1B);
+CInterpretConst WM_xxx(E2v_WM_xxx, ITCF_HEX1B);
 
 ///////////////////////////////////////////////////////////////////////////
 // VK_xxx : Virtual Keycode , VS2010
@@ -370,7 +370,7 @@ CInterpretConst WM_xxx(e2v_WM_xxx, ITCF_HEX1B);
 #define VK_Y 'Y'
 #define VK_Z 'Z'
 
-const Enum2Val_st e2v_VK_xxx[] =
+const Enum2Val_st E2v_VK_xxx[] =
 {
 /*
  * Virtual Keys, Standard Set
@@ -665,7 +665,7 @@ const Enum2Val_st e2v_VK_xxx[] =
 	ITC_NAMEPAIR(VK_PA1), // 0xFD
 	ITC_NAMEPAIR(VK_OEM_CLEAR), // 0xFE
 };
-CInterpretConst VK_xxx(e2v_VK_xxx, ITCF_HEX1B);
+CInterpretConst VK_xxx(E2v_VK_xxx, ITCF_HEX1B);
 
 
 ///////////////////////////////////////////////////////////////////////////
@@ -786,7 +786,7 @@ const Bitfield2Val_st b2v_WS_EX_xxx[] =
 CInterpretConst WS_EX_xxx(b2v_WS_EX_xxx, ITCF_HEX4B);
 
 
-const Enum2Val_st c2v_WS_xxx_static_TYPE[] =
+const Enum2Val_st e2v_WS_xxx_static_TYPE[] =
 {
 //	#define SS_TYPEMASK         0x0000001FL
 
@@ -811,7 +811,7 @@ const Enum2Val_st c2v_WS_xxx_static_TYPE[] =
 	ITC_NAMEPAIR(SS_ETCHEDFRAME), // 0x00000012L
 };
 
-const Enum2Val_st c2v_WS_xxx_static_ELLIPSIS[] =
+const Enum2Val_st e2v_WS_xxx_static_ELLIPSIS[] =
 {
 //	#define SS_ELLIPSISMASK     0x0000C000L
 
@@ -832,14 +832,14 @@ const Bitfield2Val_st b2v_WS_xxx_static[] =
 	ITC_NAMEPAIR(SS_EDITCONTROL), // 0x00002000L
 };
 
-const ConstGroup_st cs_WS_xxx_static[] =
+const ConstGroup_st cgs_WS_xxx_static[] =
 {
 //	{ WS_HIWORD_MASK,  c2v_WS_xxx_childwnd   , ARRAYSIZE(c2v_WS_xxx_childwnd) },
-	{ SS_TYPEMASK,     c2v_WS_xxx_static_TYPE, ARRAYSIZE(c2v_WS_xxx_static_TYPE) },
-	{ SS_ELLIPSISMASK, c2v_WS_xxx_static_ELLIPSIS, ARRAYSIZE(c2v_WS_xxx_static_ELLIPSIS) },
+	{ SS_TYPEMASK,     e2v_WS_xxx_static_TYPE, ARRAYSIZE(e2v_WS_xxx_static_TYPE) },
+	{ SS_ELLIPSISMASK, e2v_WS_xxx_static_ELLIPSIS, ARRAYSIZE(e2v_WS_xxx_static_ELLIPSIS) },
 };
 CInterpretConst WS_xxx_static(ITCF_HEX4B, 
-	cs_WS_xxx_static, ARRAYSIZE(cs_WS_xxx_static),
+	cgs_WS_xxx_static, ARRAYSIZE(cgs_WS_xxx_static),
 	b2v_WS_xxx_static, ARRAYSIZE(b2v_WS_xxx_static),     // 8 bits
 	b2v_WS_xxx_childwnd, ARRAYSIZE(b2v_WS_xxx_childwnd), // 17 bits
 	nullptr, 0);
