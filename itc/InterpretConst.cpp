@@ -8,16 +8,16 @@ namespace itc {
 
 void CInterpretConst::_reset(const TCHAR *valfmt)
 {
-	m_EnumC2V.SectionMask=0; 
-	m_EnumC2V.arConst2Val=nullptr; 
-	m_EnumC2V.nConst2Val=0; 
+	m_EnumC2V.GroupMask=0; 
+	m_EnumC2V.arEnum2Val=nullptr; 
+	m_EnumC2V.nEnum2Val=0; 
 
-	m_dtor_delete_sections = false;
+	m_dtor_delete_groups = false;
 
 	SetValFmt( valfmt );
 
-	m_arSections = nullptr;
-	m_nSections = 0;
+	m_arGroups = nullptr;
+	m_nGroups = 0;
 }
 
 bool CInterpretConst::SetValFmt(const TCHAR *fmt)
@@ -50,8 +50,8 @@ bool CInterpretConst::SetValFmt(const TCHAR *fmt)
 
 CInterpretConst::~CInterpretConst()
 {
-	if(m_dtor_delete_sections)
-		delete []m_arSections;
+	if(m_dtor_delete_groups)
+		delete []m_arGroups;
 }
 
 void CInterpretConst::_ctor(const Enum2Val_st *arEnum2Val, int nEnum2Val,
@@ -59,12 +59,12 @@ void CInterpretConst::_ctor(const Enum2Val_st *arEnum2Val, int nEnum2Val,
 {
 	_reset(valfmt);
 
-	m_EnumC2V.SectionMask = 0xFFFFffff;
-	m_EnumC2V.arConst2Val = reinterpret_cast<const Const2Val_st*>(arEnum2Val);
-	m_EnumC2V.nConst2Val = nEnum2Val;
+	m_EnumC2V.GroupMask = 0xFFFFffff;
+	m_EnumC2V.arEnum2Val = arEnum2Val;
+	m_EnumC2V.nEnum2Val = nEnum2Val;
 
-	m_arSections = &m_EnumC2V;
-	m_nSections = 1;
+	m_arGroups = &m_EnumC2V;
+	m_nGroups = 1;
 
 	ensure_unique_masks();
 }
@@ -74,40 +74,40 @@ void CInterpretConst::_ctor(const Bitfield2Val_st *arBitfield2Val, int nBitfield
 {
 	_reset(valfmt);
 
-	m_arSections = new ConstSection_st[nBitfield2Val];
-	if(!m_arSections)
+	m_arGroups = new ConstGroup_st[nBitfield2Val];
+	if(!m_arGroups)
 		return;
 
-	m_nSections = nBitfield2Val;
+	m_nGroups = nBitfield2Val;
 
 	int i;
 	for(i=0; i<nBitfield2Val; i++)
 	{
 		assert(arBitfield2Val[i].ConstVal != 0); // a common input mistake
 
-		m_arSections[i].SectionMask = arBitfield2Val[i].ConstVal;
-		m_arSections[i].arConst2Val = reinterpret_cast<const Const2Val_st*>(arBitfield2Val+i);
-		m_arSections[i].nConst2Val = 1;
+		m_arGroups[i].GroupMask = arBitfield2Val[i].ConstVal;
+		m_arGroups[i].arEnum2Val = reinterpret_cast<const Enum2Val_st*>(arBitfield2Val+i);
+		m_arGroups[i].nEnum2Val = 1;
 	}
 
-	m_dtor_delete_sections = true;
+	m_dtor_delete_groups = true;
 
 	ensure_unique_masks();
 }
 
-void CInterpretConst::_ctor(const ConstSection_st *arSections, int nSections,
+void CInterpretConst::_ctor(const ConstGroup_st *arSections, int nSections,
 	const TCHAR *valfmt)
 {
 	_reset(valfmt);
 
-	m_arSections = const_cast<ConstSection_st*>(arSections);
-	m_nSections = nSections;
+	m_arGroups = const_cast<ConstGroup_st*>(arSections);
+	m_nGroups = nSections;
 
 	ensure_unique_masks();
 }
 
 CInterpretConst::CInterpretConst(const TCHAR *valfmt,
-	const ConstSection_st *arSections, int nSections, 
+	const ConstGroup_st *arSections, int nSections, 
 	const Bitfield2Val_st *arBitfield2Val, int nBitfield2Val,
 	... // more [arBitfield2Val, nBitfield2Val] pairs, end with [nullptr, nullptr]
 	) // most generic ctor, combine two sets of input
@@ -140,17 +140,17 @@ CInterpretConst::CInterpretConst(const TCHAR *valfmt,
 	// check quantity of input bitfields chunks <<< 
 	// Result in nBitfieldsAll.
 
-	m_nSections = nSections + nBitfieldsAll;
+	m_nGroups = nSections + nBitfieldsAll;
 
-	m_arSections = new ConstSection_st[m_nSections];
-	if(!m_arSections)
+	m_arGroups = new ConstGroup_st[m_nGroups];
+	if(!m_arGroups)
 		return;
 
 	for(int i=0; i<nSections; i++)
 	{
-		m_arSections[i].SectionMask = arSections[i].SectionMask;
-		m_arSections[i].arConst2Val = arSections[i].arConst2Val;
-		m_arSections[i].nConst2Val  = arSections[i].nConst2Val;
+		m_arGroups[i].GroupMask = arSections[i].GroupMask;
+		m_arGroups[i].arEnum2Val = arSections[i].arEnum2Val;
+		m_arGroups[i].nEnum2Val  = arSections[i].nEnum2Val;
 	}
 
 	va_list args;
@@ -171,9 +171,9 @@ CInterpretConst::CInterpretConst(const TCHAR *valfmt,
 
 		for(int j=0; j<nBF; j++)
 		{
-			m_arSections[advSection+j].SectionMask = pBF[j].ConstVal;
-			m_arSections[advSection+j].arConst2Val = reinterpret_cast<const Const2Val_st*>(pBF+j);
-			m_arSections[advSection+j].nConst2Val  = 1;
+			m_arGroups[advSection+j].GroupMask = pBF[j].ConstVal;
+			m_arGroups[advSection+j].arEnum2Val = reinterpret_cast<const Enum2Val_st*>(pBF+j);
+			m_arGroups[advSection+j].nEnum2Val  = 1;
 		}
 
 		advSection   += nBF;
@@ -184,7 +184,7 @@ CInterpretConst::CInterpretConst(const TCHAR *valfmt,
 
 	va_end(args);
 
-	m_dtor_delete_sections = true;
+	m_dtor_delete_groups = true;
 
 	ensure_unique_masks();
 }
@@ -203,17 +203,17 @@ bool CInterpretConst::ensure_unique_masks()
 {
 	CONSTVAL_t accum_masks = 0;
 	int sec;
-	for(sec=0; sec<m_nSections; sec++)
+	for(sec=0; sec<m_nGroups; sec++)
 	{
-		assert(m_arSections[sec].SectionMask != 0);
+		assert(m_arGroups[sec].GroupMask != 0);
 
-		bool ok_unique_mask	= is_unique_mask(accum_masks, m_arSections[sec].SectionMask);
+		bool ok_unique_mask	= is_unique_mask(accum_masks, m_arGroups[sec].GroupMask);
 		assert(ok_unique_mask);
 
 		if(!ok_unique_mask)
 			return false;
 
-		accum_masks |= m_arSections[sec].SectionMask;
+		accum_masks |= m_arGroups[sec].GroupMask;
 	}
 
 	return true;
@@ -256,22 +256,22 @@ const TCHAR *CInterpretConst::Interpret(
 	CONSTVAL_t remain_val = input_val;
 
 	int sec = 0;
-	for(sec=0; sec<m_nSections; sec++)
+	for(sec=0; sec<m_nGroups; sec++)
 	{
-		CONSTVAL_t secval = input_val & m_arSections[sec].SectionMask;
+		CONSTVAL_t secval = input_val & m_arGroups[sec].GroupMask;
 
-		auto c2v = m_arSections[sec].arConst2Val;
+		auto c2v = m_arGroups[sec].arEnum2Val;
 		int i;
-		for(i=0; i<m_arSections[sec].nConst2Val; i++)
+		for(i=0; i<m_arGroups[sec].nEnum2Val; i++)
 		{
 			if(c2v[i].ConstVal==secval)
 			{
-				if(c2v[i].ConstName)
+				if(c2v[i].EnumName)
 				{
 					TCHAR szbuf[OneDisplayMaxChars] = {};
 					_sntprintf_s(buf, bufsize, _TRUNCATE, _T("%s%s|"), 
 						buf, 
-						FormatOneDisplay(c2v[i].ConstName, c2v[i].ConstVal, 
+						FormatOneDisplay(c2v[i].EnumName, c2v[i].ConstVal, 
 						dispfmt, szbuf, ARRAYSIZE(szbuf))
 						);
 				}
@@ -282,9 +282,9 @@ const TCHAR *CInterpretConst::Interpret(
 
 		// No designated name exists, we consider it an unrecognized value from
 		// the running env, so should present its hex-value instead of mute on it.
-		if(i==m_arSections[sec].nConst2Val)
+		if(i==m_arGroups[sec].nEnum2Val)
 		{
-			if(!m_dtor_delete_sections || secval!=0)
+			if(!m_dtor_delete_groups || secval!=0)
 			{
 				TCHAR fmt_explicit[10] = {};
 				const TCHAR *p_fmt_concat = nullptr;
@@ -312,7 +312,7 @@ const TCHAR *CInterpretConst::Interpret(
 			}
 		}
 
-		remain_val &= ~m_arSections[sec].SectionMask;
+		remain_val &= ~m_arGroups[sec].GroupMask;
 	}
 
 	if(remain_val)

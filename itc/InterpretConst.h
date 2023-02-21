@@ -21,17 +21,11 @@ struct Bitfield2Val_st
 	CONSTVAL_t ConstVal;
 };
 
-struct Const2Val_st
+struct ConstGroup_st
 {
-	const TCHAR *ConstName;
-	CONSTVAL_t ConstVal;
-};
-
-struct ConstSection_st
-{
-	CONSTVAL_t SectionMask;
-	const Const2Val_st *arConst2Val;
-	int nConst2Val; // element of arConst2Val[]
+	CONSTVAL_t GroupMask;
+	const Enum2Val_st *arEnum2Val;
+	int nEnum2Val; // element of arEnum2Val[]
 };
 
 enum DisplayFormat_et
@@ -124,13 +118,13 @@ public:
 
 	//
 
-	CInterpretConst(const ConstSection_st *arSections, int nSections, const TCHAR *valfmt=nullptr)
+	CInterpretConst(const ConstGroup_st *arSections, int nSections, const TCHAR *valfmt=nullptr)
 	{
 		_ctor(arSections, nSections, valfmt);
 	}
 
 	template<size_t eles>
-	CInterpretConst(const ConstSection_st (&ar)[eles], const TCHAR *valfmt=nullptr)
+	CInterpretConst(const ConstGroup_st (&ar)[eles], const TCHAR *valfmt=nullptr)
 	{
 		_ctor(ar, eles, valfmt);
 	}
@@ -138,7 +132,7 @@ public:
 	//
 
 	CInterpretConst(const TCHAR *valfmt,
-		const ConstSection_st *arSections, int nSections, 
+		const ConstGroup_st *arSections, int nSections, 
 		const Bitfield2Val_st *arBitfield2Val, int nBitfield2Val,
 		... // more [arBitfield2Val, nBitfield2Val] pairs, end with [nullptr, 0]
 		);
@@ -166,12 +160,12 @@ private:
 	void _ctor(const Bitfield2Val_st *arBitfield2Val, int nBitfield2Val, 
 		const TCHAR *valfmt);
 
-	void _ctor(const ConstSection_st *arSections, int nSections, 
+	void _ctor(const ConstGroup_st *arSections, int nSections, 
 		const TCHAR *valfmt);
 
 private:
 	void _reset(const TCHAR *valfmt);
-	bool is_enum_ctor(){ return m_arSections==&m_EnumC2V; };
+	bool is_enum_ctor(){ return m_arGroups==&m_EnumC2V; };
 	static bool is_unique_mask(CONSTVAL_t oldmasks, CONSTVAL_t newmask);
 	bool ensure_unique_masks();
 
@@ -179,15 +173,15 @@ private:
 		TCHAR obuf[], int obufsize);
 
 private:
-	ConstSection_st m_EnumC2V;
-	bool m_dtor_delete_sections;
+	ConstGroup_st m_EnumC2V; // in the case of a single group
+	bool m_dtor_delete_groups;
 
 	const TCHAR *m_valfmt; 
 	// -- format string when showing value, "%d", "%X", "0x%04X" etc
 
 private:
-	ConstSection_st *m_arSections;
-	int m_nSections;
+	ConstGroup_st *m_arGroups;
+	int m_nGroups;
 
 	void *ptr_unused1, *ptr_unused2, *ptr_unused3, *ptr_unused4;
 };

@@ -786,7 +786,7 @@ const Bitfield2Val_st b2v_WS_EX_xxx[] =
 CInterpretConst WS_EX_xxx(b2v_WS_EX_xxx, ITCF_HEX4B);
 
 
-const Const2Val_st c2v_WS_xxx_static_TYPE[] =
+const Enum2Val_st c2v_WS_xxx_static_TYPE[] =
 {
 //	#define SS_TYPEMASK         0x0000001FL
 
@@ -811,7 +811,7 @@ const Const2Val_st c2v_WS_xxx_static_TYPE[] =
 	ITC_NAMEPAIR(SS_ETCHEDFRAME), // 0x00000012L
 };
 
-const Const2Val_st c2v_WS_xxx_static_ELLIPSIS[] =
+const Enum2Val_st c2v_WS_xxx_static_ELLIPSIS[] =
 {
 //	#define SS_ELLIPSISMASK     0x0000C000L
 
@@ -832,7 +832,7 @@ const Bitfield2Val_st b2v_WS_xxx_static[] =
 	ITC_NAMEPAIR(SS_EDITCONTROL), // 0x00002000L
 };
 
-const ConstSection_st cs_WS_xxx_static[] =
+const ConstGroup_st cs_WS_xxx_static[] =
 {
 //	{ WS_HIWORD_MASK,  c2v_WS_xxx_childwnd   , ARRAYSIZE(c2v_WS_xxx_childwnd) },
 	{ SS_TYPEMASK,     c2v_WS_xxx_static_TYPE, ARRAYSIZE(c2v_WS_xxx_static_TYPE) },
