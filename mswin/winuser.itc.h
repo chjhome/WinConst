@@ -15,6 +15,7 @@ extern CInterpretConst WS_EX_xxx;
 
 extern CInterpretConst WS_EX_xxx;
 extern CInterpretConst WS_xxx_static;
+extern CInterpretConst WS_xxx_edit;
 
 } // namespace itc {
 
