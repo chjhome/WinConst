@@ -933,6 +933,60 @@ CInterpretConst WS_xxx_Button(ITCF_HEX4B,
 	b2v_WS_xxx_childwnd, ARRAYSIZE(b2v_WS_xxx_childwnd), // 17 bits
 	nullptr, 0);
 
+// Window style for "ListBox"
+
+const Bitfield2Val_st b2v_WS_xxx_ListBox[] = 
+{
+	ITC_NAMEPAIR(LBS_NOTIFY),            // 0x0001L
+	ITC_NAMEPAIR(LBS_SORT),              // 0x0002L
+	ITC_NAMEPAIR(LBS_NOREDRAW),          // 0x0004L
+	ITC_NAMEPAIR(LBS_MULTIPLESEL),       // 0x0008L
+	ITC_NAMEPAIR(LBS_OWNERDRAWFIXED),    // 0x0010L
+	ITC_NAMEPAIR(LBS_OWNERDRAWVARIABLE), // 0x0020L
+	ITC_NAMEPAIR(LBS_HASSTRINGS),        // 0x0040L
+	ITC_NAMEPAIR(LBS_USETABSTOPS),       // 0x0080L
+	ITC_NAMEPAIR(LBS_NOINTEGRALHEIGHT),  // 0x0100L
+	ITC_NAMEPAIR(LBS_MULTICOLUMN),       // 0x0200L
+	ITC_NAMEPAIR(LBS_WANTKEYBOARDINPUT), // 0x0400L
+	ITC_NAMEPAIR(LBS_EXTENDEDSEL),       // 0x0800L
+	ITC_NAMEPAIR(LBS_DISABLENOSCROLL),   // 0x1000L
+	ITC_NAMEPAIR(LBS_NODATA),            // 0x2000L
+	ITC_NAMEPAIR(LBS_NOSEL),             // 0x4000L
+	ITC_NAMEPAIR(LBS_COMBOBOX),          // 0x8000L
+};
+CInterpretConst WS_xxx_ListBox(ITCF_HEX4B,
+	nullptr, 0,
+	b2v_WS_xxx_ListBox,  ARRAYSIZE(b2v_WS_xxx_ListBox),  // 16 bits
+	b2v_WS_xxx_childwnd, ARRAYSIZE(b2v_WS_xxx_childwnd), // 17 bits
+	nullptr, 0);
+
+// Window style for "ComboBox"
+
+const Bitfield2Val_st b2v_WS_xxx_ComboBox[] =
+{
+	ITC_NAMEPAIR(CBS_SIMPLE),            // 0x0001L
+	ITC_NAMEPAIR(CBS_DROPDOWN),          // 0x0002L
+//	ITC_NAMEPAIR(CBS_DROPDOWNLIST),      // 0x0003L = CBS_DROPDOWN + CBS_SIMPLE
+	ITC_NAMEPAIR(CBS_OWNERDRAWFIXED),    // 0x0010L
+	ITC_NAMEPAIR(CBS_OWNERDRAWVARIABLE), // 0x0020L
+	ITC_NAMEPAIR(CBS_AUTOHSCROLL),       // 0x0040L
+	ITC_NAMEPAIR(CBS_OEMCONVERT),        // 0x0080L
+	ITC_NAMEPAIR(CBS_SORT),              // 0x0100L
+	ITC_NAMEPAIR(CBS_HASSTRINGS),        // 0x0200L
+	ITC_NAMEPAIR(CBS_NOINTEGRALHEIGHT),  // 0x0400L
+	ITC_NAMEPAIR(CBS_DISABLENOSCROLL),   // 0x0800L
+	ITC_NAMEPAIR(CBS_UPPERCASE),         // 0x2000L
+	ITC_NAMEPAIR(CBS_LOWERCASE),         // 0x4000L
+};
+CInterpretConst WS_xxx_ComboBox(ITCF_HEX4B, 
+	nullptr, 0,
+	b2v_WS_xxx_ComboBox, ARRAYSIZE(b2v_WS_xxx_ComboBox), // 12 bits
+	b2v_WS_xxx_childwnd, ARRAYSIZE(b2v_WS_xxx_childwnd), // 17 bits
+	nullptr, 0);
+
+// Window style for "SysListView32"
+
+
 
 
 } //namespace itc

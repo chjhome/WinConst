@@ -16,6 +16,9 @@ extern CInterpretConst WS_EX_xxx;
 extern CInterpretConst WS_xxx_Static;
 extern CInterpretConst WS_xxx_Edit;
 extern CInterpretConst WS_xxx_Button;
+extern CInterpretConst WS_xxx_ListBox;
+extern CInterpretConst WS_xxx_ComboBox;
+
 
 } // namespace itc {
 
