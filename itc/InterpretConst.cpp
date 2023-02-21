@@ -12,7 +12,7 @@ void CInterpretConst::_reset(const TCHAR *valfmt)
 	m_EnumC2V.arConst2Val=nullptr; 
 	m_EnumC2V.nConst2Val=0; 
 
-	m_using_Bitfield_ctor = false;
+	m_dtor_delete_sections = false;
 
 	SetValFmt( valfmt );
 
@@ -50,19 +50,8 @@ bool CInterpretConst::SetValFmt(const TCHAR *fmt)
 
 CInterpretConst::~CInterpretConst()
 {
-	if(m_using_Bitfield_ctor)
+	if(m_dtor_delete_sections)
 		delete []m_arSections;
-}
-
-void CInterpretConst::_ctor(const ConstSection_st *arSections, int nSections,
-	const TCHAR *valfmt)
-{
-	_reset(valfmt);
-
-	m_arSections = const_cast<ConstSection_st*>(arSections);
-	m_nSections = nSections;
-
-	ensure_unique_masks();
 }
 
 void CInterpretConst::_ctor(const Enum2Val_st *arEnum2Val, int nEnum2Val,
@@ -101,7 +90,101 @@ void CInterpretConst::_ctor(const Bitfield2Val_st *arBitfield2Val, int nBitfield
 		m_arSections[i].nConst2Val = 1;
 	}
 
-	m_using_Bitfield_ctor = true;
+	m_dtor_delete_sections = true;
+
+	ensure_unique_masks();
+}
+
+void CInterpretConst::_ctor(const ConstSection_st *arSections, int nSections,
+	const TCHAR *valfmt)
+{
+	_reset(valfmt);
+
+	m_arSections = const_cast<ConstSection_st*>(arSections);
+	m_nSections = nSections;
+
+	ensure_unique_masks();
+}
+
+CInterpretConst::CInterpretConst(const TCHAR *valfmt,
+	const ConstSection_st *arSections, int nSections, 
+	const Bitfield2Val_st *arBitfield2Val, int nBitfield2Val,
+	... // more [arBitfield2Val, nBitfield2Val] pairs, end with [nullptr, nullptr]
+	) // most generic ctor, combine two sets of input
+{
+	_reset(valfmt);
+
+	// check quantity of input bitfields chunks >>>
+
+	int nBitfieldsChunk = 0; // debug
+	int nBitfieldsAll = 0;
+	if(1)
+	{
+		va_list args;
+		va_start(args, nSections);
+
+		for(; ; nBitfieldsChunk++)
+		{
+			const Bitfield2Val_st *p = va_arg(args, const Bitfield2Val_st *);
+			int n = va_arg(args, int);
+
+			if(!p)
+				break;
+
+			nBitfieldsAll += n;
+		}
+
+		va_end(args);
+	}
+
+	// check quantity of input bitfields chunks <<< 
+	// Result in nBitfieldsAll.
+
+	m_nSections = nSections + nBitfieldsAll;
+
+	m_arSections = new ConstSection_st[m_nSections];
+	if(!m_arSections)
+		return;
+
+	for(int i=0; i<nSections; i++)
+	{
+		m_arSections[i].SectionMask = arSections[i].SectionMask;
+		m_arSections[i].arConst2Val = arSections[i].arConst2Val;
+		m_arSections[i].nConst2Val  = arSections[i].nConst2Val;
+	}
+
+	va_list args;
+	va_start(args, nSections);
+	int bfall_verify = 0;
+
+	int advSection = nSections;
+	
+	for(; ;)
+	{
+		assert(bfall_verify<=nBitfieldsAll);
+
+		const Bitfield2Val_st *pBF = va_arg(args, const Bitfield2Val_st *);
+		int nBF = va_arg(args, int);
+
+		if(!pBF)
+			break;
+
+		for(int j=0; j<nBF; j++)
+		{
+			m_arSections[advSection+j].SectionMask = pBF[j].ConstVal;
+			m_arSections[advSection+j].arConst2Val = reinterpret_cast<const Const2Val_st*>(pBF+j);
+			m_arSections[advSection+j].nConst2Val  = 1;
+		}
+
+		advSection   += nBF;
+		bfall_verify += nBF;
+	}
+
+	assert(bfall_verify==nBitfieldsAll);
+
+	va_end(args);
+
+	m_dtor_delete_sections = true;
 
 	ensure_unique_masks();
 }
@@ -122,6 +205,8 @@ bool CInterpretConst::ensure_unique_masks()
 	int sec;
 	for(sec=0; sec<m_nSections; sec++)
 	{
+		assert(m_arSections[sec].SectionMask != 0);
+
 		bool ok_unique_mask	= is_unique_mask(accum_masks, m_arSections[sec].SectionMask);
 		assert(ok_unique_mask);
 
@@ -199,7 +284,7 @@ const TCHAR *CInterpretConst::Interpret(
 		// the running env, so should present its hex-value instead of mute on it.
 		if(i==m_arSections[sec].nConst2Val)
 		{
-			if(!m_using_Bitfield_ctor || secval!=0)
+			if(!m_dtor_delete_sections || secval!=0)
 			{
 				TCHAR fmt_explicit[10] = {};
 				const TCHAR *p_fmt_concat = nullptr;

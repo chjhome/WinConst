@@ -135,10 +135,20 @@ public:
 		_ctor(ar, eles, valfmt);
 	}
 
+	//
+
+	CInterpretConst(const TCHAR *valfmt,
+		const ConstSection_st *arSections, int nSections, 
+		const Bitfield2Val_st *arBitfield2Val, int nBitfield2Val,
+		... // more [arBitfield2Val, nBitfield2Val] pairs, end with [nullptr, 0]
+		);
+
+	////
+
 	const TCHAR *Interpret(CONSTVAL_t val, DisplayFormat_et dispfmt,
 		TCHAR *buf, int bufsize);
 
-	String Interpret(CONSTVAL_t val, DisplayFormat_et dispfmt);
+	String Interpret(CONSTVAL_t val, DisplayFormat_et dispfmt=DF_NameOnly);
 
 	bool SetValFmt(const TCHAR *fmt);
 
@@ -170,7 +180,7 @@ private:
 
 private:
 	ConstSection_st m_EnumC2V;
-	bool m_using_Bitfield_ctor;
+	bool m_dtor_delete_sections;
 
 	const TCHAR *m_valfmt; 
 	// -- format string when showing value, "%d", "%X", "0x%04X" etc
