@@ -281,10 +281,11 @@ const TCHAR *CInterpretConst::Interpret(
 		}
 
 		// No designated name exists, we consider it an unrecognized value from
-		// the running env, so should present its hex-value instead of mute on it.
+		// ITC interpreter's knowledge, so should present its hex-value instead of mute on it.
+		//
 		if(i==m_arGroups[sec].nEnum2Val)
 		{
-			if(!m_dtor_delete_groups || secval!=0)
+			if( secval!=0 || i>1 )
 			{
 				TCHAR fmt_explicit[10] = {};
 				const TCHAR *p_fmt_concat = nullptr;
