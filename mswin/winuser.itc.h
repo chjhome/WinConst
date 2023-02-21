@@ -13,9 +13,9 @@ extern CInterpretConst WS_xxx_toplevel;
 extern CInterpretConst WS_xxx_childwnd;
 extern CInterpretConst WS_EX_xxx;
 
-extern CInterpretConst WS_EX_xxx;
-extern CInterpretConst WS_xxx_static;
-extern CInterpretConst WS_xxx_edit;
+extern CInterpretConst WS_xxx_Static;
+extern CInterpretConst WS_xxx_Edit;
+extern CInterpretConst WS_xxx_Button;
 
 } // namespace itc {
 

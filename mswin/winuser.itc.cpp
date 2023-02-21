@@ -785,8 +785,9 @@ const Bitfield2Val_st b2v_WS_EX_xxx[] =
 };
 CInterpretConst WS_EX_xxx(b2v_WS_EX_xxx, ITCF_HEX4B);
 
+// Window style for "Static"
 
-const Enum2Val_st e2v_WS_xxx_static_TYPE[] =
+const Enum2Val_st e2v_WS_xxx_Static_TYPE[] =
 {
 //	#define SS_TYPEMASK         0x0000001FL
 
@@ -811,16 +812,18 @@ const Enum2Val_st e2v_WS_xxx_static_TYPE[] =
 	ITC_NAMEPAIR(SS_ETCHEDFRAME), // 0x00000012L
 };
 
-const Enum2Val_st e2v_WS_xxx_static_ELLIPSIS[] =
+#define SS_NO_ELLIPSIS 0 // Chj
+const Enum2Val_st e2v_WS_xxx_Static_ELLIPSIS[] =
 {
 //	#define SS_ELLIPSISMASK     0x0000C000L
 
-	ITC_NAMEPAIR(SS_ENDELLIPSIS), // 0x00004000L
+	ITC_NAMEPAIR(SS_NO_ELLIPSIS),  // 0
+	ITC_NAMEPAIR(SS_ENDELLIPSIS),  // 0x00004000L
 	ITC_NAMEPAIR(SS_PATHELLIPSIS), // 0x00008000L
 	ITC_NAMEPAIR(SS_WORDELLIPSIS), // 0x0000C000L
 };
 
-const Bitfield2Val_st b2v_WS_xxx_static[] = 
+const Bitfield2Val_st b2v_WS_xxx_Static[] = 
 {
 	ITC_NAMEPAIR(SS_REALSIZECONTROL), // 0x00000040L
 	ITC_NAMEPAIR(SS_NOPREFIX), // 0x00000080L Don't do "&" character translation 
@@ -832,19 +835,32 @@ const Bitfield2Val_st b2v_WS_xxx_static[] =
 	ITC_NAMEPAIR(SS_EDITCONTROL), // 0x00002000L
 };
 
-const ConstGroup_st cgs_WS_xxx_static[] =
+const ConstGroup_st cgs_WS_xxx_Static[] =
 {
-//	{ WS_HIWORD_MASK,  c2v_WS_xxx_childwnd   , ARRAYSIZE(c2v_WS_xxx_childwnd) },
-	{ SS_TYPEMASK,     e2v_WS_xxx_static_TYPE, ARRAYSIZE(e2v_WS_xxx_static_TYPE) },
-	{ SS_ELLIPSISMASK, e2v_WS_xxx_static_ELLIPSIS, ARRAYSIZE(e2v_WS_xxx_static_ELLIPSIS) },
+	{ SS_TYPEMASK,     e2v_WS_xxx_Static_TYPE, ARRAYSIZE(e2v_WS_xxx_Static_TYPE) },
+	{ SS_ELLIPSISMASK, e2v_WS_xxx_Static_ELLIPSIS, ARRAYSIZE(e2v_WS_xxx_Static_ELLIPSIS) },
 };
-CInterpretConst WS_xxx_static(ITCF_HEX4B, 
-	cgs_WS_xxx_static, ARRAYSIZE(cgs_WS_xxx_static),
-	b2v_WS_xxx_static, ARRAYSIZE(b2v_WS_xxx_static),     // 8 bits
+CInterpretConst WS_xxx_Static(ITCF_HEX4B, 
+	cgs_WS_xxx_Static, ARRAYSIZE(cgs_WS_xxx_Static),
+	b2v_WS_xxx_Static, ARRAYSIZE(b2v_WS_xxx_Static),     // 8 bits
 	b2v_WS_xxx_childwnd, ARRAYSIZE(b2v_WS_xxx_childwnd), // 17 bits
 	nullptr, 0);
+// -- Chj memo:
+// For a "static"-class(or "button"-class etc) window, high 16-bits of it window-style
+// can be interpret as b2v_WS_xxx_toplevel or b2v_WS_xxx_childwnd, who have two-bits
+// of different meaning(e.g. WS_MINIMIZEBOX vs WS_GROUP). For strictness, we should have
+// defined WS_xxx_static_toplevel and WS_xxx_static_childwnd. But, since a "static"/"button"
+// is rarely created as a toplevel window, so WS_xxx_static_toplevel is omitted here.
+// We keep only WS_xxx_static as the same meaning as WS_xxx_static_childwnd, same for
+// other Windows standard controls: WS_xxx_edit, WS_xxx_button etc. So those rarely used
+// duplications are eliminated.
+// 
+// One rare case is: Win7 Desktop [Start] button is created as toplevel.
 
-const Bitfield2Val_st b2v_WS_xxx_edit[] =
+
+// Window style for "Edit"
+
+const Bitfield2Val_st b2v_WS_xxx_Edit[] =
 {
 //	ITC_NAMEPAIR(ES_LEFT), // 0x0000L
 	ITC_NAMEPAIR(ES_CENTER), // 0x0001L
@@ -861,12 +877,62 @@ const Bitfield2Val_st b2v_WS_xxx_edit[] =
 	ITC_NAMEPAIR(ES_WANTRETURN), // 0x1000L
 	ITC_NAMEPAIR(ES_NUMBER), // 0x2000L
 };
-CInterpretConst WS_xxx_edit(ITCF_HEX4B,
+CInterpretConst WS_xxx_Edit(ITCF_HEX4B,
 	nullptr, 0, 
-	b2v_WS_xxx_edit, ARRAYSIZE(b2v_WS_xxx_edit),
+	b2v_WS_xxx_Edit, ARRAYSIZE(b2v_WS_xxx_Edit),
+	b2v_WS_xxx_childwnd, ARRAYSIZE(b2v_WS_xxx_childwnd), // 17 bits
+	nullptr, 0);
+
+// Window style for "Button"
+
+const Enum2Val_st e2v_WS_xxx_Button_TYPE[] = 
+{
+//	ITC_NAMEPAIR(BS_TYPEMASK),         // 0x0000000FL (mask)
+
+	ITC_NAMEPAIR(BS_PUSHBUTTON),       // 0x00000000L
+	ITC_NAMEPAIR(BS_DEFPUSHBUTTON),    // 0x00000001L
+	ITC_NAMEPAIR(BS_CHECKBOX),         // 0x00000002L
+	ITC_NAMEPAIR(BS_AUTOCHECKBOX),     // 0x00000003L
+	ITC_NAMEPAIR(BS_RADIOBUTTON),      // 0x00000004L
+	ITC_NAMEPAIR(BS_3STATE),           // 0x00000005L
+	ITC_NAMEPAIR(BS_AUTO3STATE),       // 0x00000006L
+	ITC_NAMEPAIR(BS_GROUPBOX),         // 0x00000007L
+	ITC_NAMEPAIR(BS_USERBUTTON),       // 0x00000008L
+	ITC_NAMEPAIR(BS_AUTORADIOBUTTON),  // 0x00000009L
+	ITC_NAMEPAIR(BS_PUSHBOX),          // 0x0000000AL
+	ITC_NAMEPAIR(BS_OWNERDRAW),        // 0x0000000BL
+};
+
+const Bitfield2Val_st b2v_WS_xxx_Button[] =
+{
+	ITC_NAMEPAIR(BS_LEFTTEXT),         // 0x00000020L
+
+//	ITC_NAMEPAIR(BS_TEXT),             // 0x00000000L
+	ITC_NAMEPAIR(BS_ICON),             // 0x00000040L
+	ITC_NAMEPAIR(BS_BITMAP),           // 0x00000080L
+	ITC_NAMEPAIR(BS_LEFT),             // 0x00000100L
+	ITC_NAMEPAIR(BS_RIGHT),            // 0x00000200L
+//	ITC_NAMEPAIR(BS_CENTER),           // 0x00000300L = BS_LEFT|BS_RIGHT
+	ITC_NAMEPAIR(BS_TOP),              // 0x00000400L
+	ITC_NAMEPAIR(BS_BOTTOM),           // 0x00000800L
+//	ITC_NAMEPAIR(BS_VCENTER),          // 0x00000C00L = BS_TOP|BS_BOTTOM
+	ITC_NAMEPAIR(BS_PUSHLIKE),         // 0x00001000L
+	ITC_NAMEPAIR(BS_MULTILINE),        // 0x00002000L
+	ITC_NAMEPAIR(BS_NOTIFY),           // 0x00004000L
+	ITC_NAMEPAIR(BS_FLAT),             // 0x00008000L
+//	ITC_NAMEPAIR(BS_RIGHTBUTTON),      // BS_LEFTTEXT
+};
+
+const ConstGroup_st cgs_WS_xxx_Button[] =
+{
+	{ BS_TYPEMASK, e2v_WS_xxx_Button_TYPE, ARRAYSIZE(e2v_WS_xxx_Button_TYPE) },
+};
+CInterpretConst WS_xxx_Button(ITCF_HEX4B,
+	cgs_WS_xxx_Button, ARRAYSIZE(cgs_WS_xxx_Button),
+	b2v_WS_xxx_Button, ARRAYSIZE(b2v_WS_xxx_Button),     // 10 bits
 	b2v_WS_xxx_childwnd, ARRAYSIZE(b2v_WS_xxx_childwnd), // 17 bits
 	nullptr, 0);
 
 
 
-} //namespace itc {
+} //namespace itc
