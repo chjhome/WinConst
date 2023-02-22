@@ -4,8 +4,8 @@
 #include <tchar.h> // for TCHAR & _T
 
 
-namespace itc
-{
+namespace itc {
+
 
 typedef unsigned long CONSTVAL_t;
 
@@ -21,12 +21,16 @@ struct Bitfield2Val_st
 	CONSTVAL_t ConstVal;
 };
 
-struct ConstGroup_st
+struct EnumGroup_st
 {
 	CONSTVAL_t GroupMask;
 	const Enum2Val_st *arEnum2Val;
 	int nEnum2Val; // element of arEnum2Val[]
 };
+
+typedef EnumGroup_st ItcGroup_st;
+// -- When CInterpretConst internally process enum-group and single-bit-group
+//    the same way, it will use the name ItcGroup_st.
 
 enum DisplayFormat_et
 {
@@ -118,13 +122,13 @@ public:
 
 	//
 
-	CInterpretConst(const ConstGroup_st *arGroups, int nGroups, const TCHAR *valfmt=nullptr)
+	CInterpretConst(const EnumGroup_st *arGroups, int nGroups, const TCHAR *valfmt=nullptr)
 	{
 		_ctor(arGroups, nGroups, valfmt);
 	}
 
 	template<size_t eles>
-	CInterpretConst(const ConstGroup_st (&ar)[eles], const TCHAR *valfmt=nullptr)
+	CInterpretConst(const EnumGroup_st (&ar)[eles], const TCHAR *valfmt=nullptr)
 	{
 		_ctor(ar, eles, valfmt);
 	}
@@ -132,7 +136,7 @@ public:
 	//
 
 	CInterpretConst(const TCHAR *valfmt,
-		const ConstGroup_st *arGroups, int nGroups, 
+		const EnumGroup_st *arGroups, int nGroups, 
 		const Bitfield2Val_st *arBitfield2Val, int nBitfield2Val,
 		... // more [arBitfield2Val, nBitfield2Val] pairs, end with [nullptr, 0]
 		);
@@ -160,7 +164,7 @@ private:
 	void _ctor(const Bitfield2Val_st *arBitfield2Val, int nBitfield2Val, 
 		const TCHAR *valfmt);
 
-	void _ctor(const ConstGroup_st *arGroups, int nGroups, 
+	void _ctor(const EnumGroup_st *arGroups, int nGroups, 
 		const TCHAR *valfmt);
 
 private:
@@ -173,14 +177,14 @@ private:
 		TCHAR obuf[], int obufsize);
 
 private:
-	ConstGroup_st m_EnumC2V; // in the case of a single group
+	EnumGroup_st m_EnumC2V; // in the case of a single group
 	bool m_dtor_delete_groups;
 
 	const TCHAR *m_valfmt; 
 	// -- format string when showing value, "%d", "%X", "0x%04X" etc
 
 private:
-	ConstGroup_st *m_arGroups;
+	ItcGroup_st *m_arGroups;
 	int m_nGroups;
 
 	void *ptr_unused1, *ptr_unused2, *ptr_unused3, *ptr_unused4;

@@ -74,7 +74,7 @@ void CInterpretConst::_ctor(const Bitfield2Val_st *arBitfield2Val, int nBitfield
 {
 	_reset(valfmt);
 
-	m_arGroups = new ConstGroup_st[nBitfield2Val];
+	m_arGroups = new ItcGroup_st[nBitfield2Val];
 	if(!m_arGroups)
 		return;
 
@@ -95,19 +95,19 @@ void CInterpretConst::_ctor(const Bitfield2Val_st *arBitfield2Val, int nBitfield
 	ensure_unique_masks();
 }
 
-void CInterpretConst::_ctor(const ConstGroup_st *arGroups, int nGroups,
+void CInterpretConst::_ctor(const ItcGroup_st *arGroups, int nGroups,
 	const TCHAR *valfmt)
 {
 	_reset(valfmt);
 
-	m_arGroups = const_cast<ConstGroup_st*>(arGroups);
+	m_arGroups = const_cast<ItcGroup_st*>(arGroups);
 	m_nGroups = nGroups;
 
 	ensure_unique_masks();
 }
 
 CInterpretConst::CInterpretConst(const TCHAR *valfmt,
-	const ConstGroup_st *arGroups, int nGroups, 
+	const EnumGroup_st *arGroups, int nGroups, 
 	const Bitfield2Val_st *arBitfield2Val, int nBitfield2Val,
 	... // more [arBitfield2Val, nBitfield2Val] pairs, end with [nullptr, nullptr]
 	) // most generic ctor, combine two sets of input
@@ -142,7 +142,7 @@ CInterpretConst::CInterpretConst(const TCHAR *valfmt,
 
 	m_nGroups = nGroups + nBitfieldsAll;
 
-	m_arGroups = new ConstGroup_st[m_nGroups];
+	m_arGroups = new ItcGroup_st[m_nGroups];
 	if(!m_arGroups)
 		return;
 

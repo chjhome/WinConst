@@ -745,13 +745,13 @@ const Bitfield2Val_st b2v_WS_xxx_Static[] =
 	ITC_NAMEPAIR(SS_EDITCONTROL), // 0x00002000L
 };
 
-const ConstGroup_st cgs_WS_xxx_Static[] =
+const EnumGroup_st egs_WS_xxx_Static[] =
 {
 	{ SS_TYPEMASK,     e2v_WS_xxx_Static_TYPE, ARRAYSIZE(e2v_WS_xxx_Static_TYPE) },
 	{ SS_ELLIPSISMASK, e2v_WS_xxx_Static_ELLIPSIS, ARRAYSIZE(e2v_WS_xxx_Static_ELLIPSIS) },
 };
 CInterpretConst WS_xxx_Static(ITCF_HEX4B, 
-	cgs_WS_xxx_Static, ARRAYSIZE(cgs_WS_xxx_Static),
+	egs_WS_xxx_Static, ARRAYSIZE(egs_WS_xxx_Static),
 	b2v_WS_xxx_Static, ARRAYSIZE(b2v_WS_xxx_Static),     // 8 bits
 	b2v_WS_xxx_childwnd, ARRAYSIZE(b2v_WS_xxx_childwnd), // 17 bits
 	nullptr, 0);
@@ -836,12 +836,12 @@ const Bitfield2Val_st b2v_WS_xxx_Button[] =
 //	ITC_NAMEPAIR(BS_RIGHTBUTTON),      // BS_LEFTTEXT
 };
 
-const ConstGroup_st cgs_WS_xxx_Button[] =
+const EnumGroup_st egs_WS_xxx_Button[] =
 {
 	{ BS_TYPEMASK, e2v_WS_xxx_Button_TYPE, ARRAYSIZE(e2v_WS_xxx_Button_TYPE) },
 };
 CInterpretConst WS_xxx_Button(ITCF_HEX4B,
-	cgs_WS_xxx_Button, ARRAYSIZE(cgs_WS_xxx_Button),
+	egs_WS_xxx_Button, ARRAYSIZE(egs_WS_xxx_Button),
 	b2v_WS_xxx_Button, ARRAYSIZE(b2v_WS_xxx_Button),     // 10 bits
 	b2v_WS_xxx_childwnd, ARRAYSIZE(b2v_WS_xxx_childwnd), // 17 bits
 	nullptr, 0);

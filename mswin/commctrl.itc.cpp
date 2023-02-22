@@ -48,13 +48,13 @@ const Bitfield2Val_st b2v_WS_xxx_SysListView32[] =
 	ITC_NAMEPAIR(LVS_NOSORTHEADER),        // 0x8000
 };
 
-const ConstGroup_st cgs_WS_xxx_SysListView32[] = 
+const EnumGroup_st egs_WS_xxx_SysListView32[] = 
 {
 	{ LVS_TYPEMASK,  e2v_WS_xxx_SysListView32_TYPE,  ARRAYSIZE(e2v_WS_xxx_SysListView32_TYPE)  },
 	{ LVS_ALIGNMASK, e2v_WS_xxx_SysListView32_ALIGN, ARRAYSIZE(e2v_WS_xxx_SysListView32_ALIGN) },
 };
 CInterpretConst WS_xxx_SysListView32(ITCF_HEX4B,
-	cgs_WS_xxx_SysListView32, ARRAYSIZE(cgs_WS_xxx_SysListView32),
+	egs_WS_xxx_SysListView32, ARRAYSIZE(egs_WS_xxx_SysListView32),
 	b2v_WS_xxx_SysListView32, ARRAYSIZE(b2v_WS_xxx_SysListView32), 
 	b2v_WS_xxx_childwnd, ARRAYSIZE(b2v_WS_xxx_childwnd),
 	nullptr, 0);
