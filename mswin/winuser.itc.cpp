@@ -693,7 +693,9 @@ CInterpretConst WS_xxx_childwnd(b2v_WS_xxx_childwnd, ITCF_HEX4B);
 
 CInterpretConst WS_EX_xxx(b2v_WS_EX_xxx, ITCF_HEX4B);
 
+//
 // Window style for "Static"
+//
 
 const Enum2Val_st e2v_WS_xxx_Static_TYPE[] =
 {
@@ -765,8 +767,9 @@ CInterpretConst WS_xxx_Static(ITCF_HEX4B,
 // 
 // One rare case is: Win7 Desktop [Start] button is created as toplevel.
 
-
+//
 // Window style for "Edit"
+//
 
 const Bitfield2Val_st b2v_WS_xxx_Edit[] =
 {
@@ -791,7 +794,9 @@ CInterpretConst WS_xxx_Edit(ITCF_HEX4B,
 	b2v_WS_xxx_childwnd, ARRAYSIZE(b2v_WS_xxx_childwnd), // 17 bits
 	nullptr, 0);
 
+//
 // Window style for "Button"
+//
 
 const Enum2Val_st e2v_WS_xxx_Button_TYPE[] = 
 {
@@ -841,7 +846,9 @@ CInterpretConst WS_xxx_Button(ITCF_HEX4B,
 	b2v_WS_xxx_childwnd, ARRAYSIZE(b2v_WS_xxx_childwnd), // 17 bits
 	nullptr, 0);
 
+//
 // Window style for "ListBox"
+//
 
 const Bitfield2Val_st b2v_WS_xxx_ListBox[] = 
 {
@@ -868,7 +875,9 @@ CInterpretConst WS_xxx_ListBox(ITCF_HEX4B,
 	b2v_WS_xxx_childwnd, ARRAYSIZE(b2v_WS_xxx_childwnd), // 17 bits
 	nullptr, 0);
 
+//
 // Window style for "ComboBox"
+//
 
 const Bitfield2Val_st b2v_WS_xxx_ComboBox[] =
 {
