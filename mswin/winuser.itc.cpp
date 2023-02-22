@@ -766,6 +766,9 @@ CInterpretConst WS_xxx_Static(ITCF_HEX4B,
 // duplications are eliminated.
 // 
 // One rare case is: Win7 Desktop [Start] button is created as toplevel.
+//
+// Another exception is for <tooltips_class32>, this wndclass is almost created as toplevel,
+// so I define WS_xxx_tooltips_class32_toplevel in commctrl.itc.cpp, using b2v_WS_xxx_toplevel.
 
 //
 // Window style for "Edit"
